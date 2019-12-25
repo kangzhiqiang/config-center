@@ -1,0 +1,93 @@
+env: jx-local
+
+
+#加密盐值
+#jasypt:
+#  encryptor:
+#    password: DGHFNBMVdfe47hyh
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://172.20.15.150:3306/jxpt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: root
+      password: mysql#123
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #Oracle需要打开注释
+      #validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        #login-username: admin
+        #login-password: admin
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+  redis:
+    database: 2
+    host: 172.20.15.150
+    port: 6380
+    password: redis#123
+    jedis:
+      pool:
+        # 最大空闲连接
+        max-idle: 500
+        # 最小空闲链接
+        min-idle: 5
+        # 最大连接数（负数表示没有限制）
+        max-active: 1000
+        # 最大阻塞等待时间（负数表示没有限制）
+        max-wait: -1
+        #连接超时时间
+    timeout: 6000
+
+
+##多数据源的配置，
+dynamic:
+  datasource:
+    read:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://172.20.15.150:3306/jxpt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: mysql#123
+    write:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://172.20.15.150:3306/jxpt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: mysql#123
+
+logging:
+  level:
+    com.jxpt: DEBUG
+sample:
+  zipkin:
+    # When enabled=false, traces log to the console. Comment to send to zipkin
+    enabled: false
+
+
+eureka:
+  instance:
+    statusPageUrlPath: /actuator/info
+    healthCheckUrlPath: /actuator/health
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
