@@ -1,0 +1,109 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://172.20.15.150:3306/jxpt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: mysql#123
+      initial-size: 10
+      max-active: 30
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #Oracle需要打开注释
+      #validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        #login-username: admin
+        #login-password: admin
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+  redis:
+    database: 2
+    host: 180.76.103.139
+    port: 6380
+    password: redis#123
+    pool:
+      max-active: 100
+      max-wait: -1
+      max-idle: 500
+      min-idle: 5
+    timeout: 6000
+  rabbitmq:
+    host: 101.124.0.198
+    port:  5672
+    username: guest
+    password: guest
+  sleuth:
+    enabled: true
+    http:
+      legacy:
+        enabled: true
+
+
+##多数据源的配置，需要引用renren-dynamic-datasource
+dynamic:
+  datasource:
+    read:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://172.20.15.150:3306/jxpt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: mysql#123
+    write:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://172.20.15.150:3306/jxpt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: mysql#123
+
+
+
+
+logging:
+  level:
+    #        tk.mybatis: DEBUG
+    com.jxpt: DEBUG
+#redis-cache 相关
+redis:
+  pool:
+    maxActive: 300
+    maxIdle: 100
+    maxWait: 1000
+  host: 180.76.103.139
+  port: 6380
+  password: redis#123
+  timeout: 2000
+  # 服务或应用名
+  sysName: jxpt-base
+  enable: true
+  database: 0
+sample:
+  zipkin:
+    # When enabled=false, traces log to the console. Comment to send to zipkin
+    enabled: false
+
+
+eureka:
+  instance:
+    statusPageUrlPath: /actuator/info
+    healthCheckUrlPath: /actuator/health
+  #        prefer-ip-address: false
+  #        ip-address: 10.1.1.186
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
